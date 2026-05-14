@@ -136,21 +136,76 @@ export default function EnquiryForm() {
     }
 
     setSubmitting(true);
-    // Simulated async submit — wire to a real endpoint later
-    await new Promise((r) => setTimeout(r, 800));
-    setSubmitting(false);
 
-    trackEvent('Contact', 'Form Submit', 'Enquiry Form');
+    /* Web3Forms — the access key registers the recipient email
+       (sheyamenterprises@gmail.com) at web3forms.com. The user provides
+       it via VITE_WEB3FORMS_KEY so it never gets committed to git.
+       Falls back to a clear error toast if the key is missing or the
+       API request fails. */
+    const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
 
-    toast.success("Enquiry sent — we'll be in touch shortly!", {
-      duration: 4000,
-      style: { background: '#0B1B5C', color: '#fff' },
-      iconTheme: { primary: '#CC1111', secondary: '#fff' },
-    });
+    if (!accessKey) {
+      setSubmitting(false);
+      toast.error(
+        'Enquiry form is not configured yet. Please call us directly at +91 99654 99444.',
+        { duration: 5000 }
+      );
+      trackEvent('Contact', 'Form Submit Misconfig', 'Enquiry Form');
+      return;
+    }
 
-    setValues(INITIAL);
-    setErrors({});
-    setTouched({});
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key:  accessKey,
+          subject:     `New enquiry from ${values.name} — ${values.service || 'general'}`,
+          from_name:   'Sheyam Enterprises Website',
+          // Submitter's contact details — when an email is given, replies
+          // from sheyamenterprises@gmail.com go straight back to them.
+          replyto:     values.email || undefined,
+          name:        values.name,
+          phone:       values.phone,
+          email:       values.email,
+          service:     values.service,
+          message:     values.message,
+          // Honeypot field — bots auto-fill this; humans never see it.
+          // Web3Forms drops the submission if it's filled.
+          botcheck:    '',
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      setSubmitting(false);
+
+      if (!res.ok || data.success === false) {
+        trackEvent('Contact', 'Form Submit Failed', 'Enquiry Form');
+        toast.error(
+          data.message || "Couldn't send right now — please call +91 99654 99444 or try again.",
+          { duration: 5000 }
+        );
+        return;
+      }
+
+      trackEvent('Contact', 'Form Submit', 'Enquiry Form');
+      toast.success("Enquiry sent — we'll be in touch shortly!", {
+        duration: 4000,
+        style: { background: '#0B1B5C', color: '#fff' },
+        iconTheme: { primary: '#CC1111', secondary: '#fff' },
+      });
+
+      setValues(INITIAL);
+      setErrors({});
+      setTouched({});
+    } catch (err) {
+      setSubmitting(false);
+      trackEvent('Contact', 'Form Submit Error', 'Enquiry Form');
+      toast.error(
+        "Network error — please call +91 99654 99444 or try again in a moment.",
+        { duration: 5000 }
+      );
+    }
   };
 
   /* Per-field input state (border + ring colour) */
