@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0B1B5C;
+  --color-navy2: #0D2575;
+  --color-red: #CC1111;
+  --color-red2: #E01515;
+  --color-ink: #09090F;
+  --color-off: #F5F7FB;
+  --color-slate: #4A5568;
+  --color-muted: #8A96AC;
+
+  --font-display: "Barlow Condensed", sans-serif;
+  --font-body: Barlow, sans-serif;
+}
+
+:root {
+  --navy: #0B1B5C;
+  --navy2: #0D2575;
+  --red: #CC1111;
+  --red2: #E01515;
+  --ink: #09090F;
+  --off: #F5F7FB;
+  --slate: #4A5568;
+  --muted: #8A96AC;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  /* Bump default body weight 400 → 500 for crisper, more legible text on
+     white-bg sections (Products, Brands, Industries, About story etc.).
+     Elements with an explicit Tailwind font-* class override this. */
+  font-weight: 500;
+  color: var(--ink);
+  background-color: var(--off);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: #CC1111;
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: #CC1111;
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4A5568;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8A96AC;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4A5568 #09090F;
+}
+
+/* Radix Accordion slide-open / slide-closed */
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+
+/* Marquee — items are duplicated in the DOM (items × 2) so translating
+   the track by exactly -50% loops back seamlessly. */
+@keyframes marquee-left {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes marquee-right {
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}

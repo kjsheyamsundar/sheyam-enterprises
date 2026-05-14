@@ -1,0 +1,13 @@
+# Sheyam Enterprises — robots.txt
+
+User-agent: *
+Allow: /
+
+# Don't crawl Vite/dev assets
+Disallow: /@vite/
+Disallow: /@react-refresh
+Disallow: /node_modules/
+Disallow: /src/
+
+# Sitemap location
+Sitemap: https://www.sheyamenterprises.com/sitemap.xml
