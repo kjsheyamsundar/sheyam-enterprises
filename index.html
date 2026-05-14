@@ -17,10 +17,21 @@
     <link rel="dns-prefetch" href="https://maps.google.com" />
     <link rel="dns-prefetch" href="https://wa.me" />
 
+    <!-- Async Google Fonts: preload + swap-in via onload so the CSS doesn't
+         block first paint. Falls back to a synchronous load inside <noscript>
+         so SSR/no-JS clients still get the webfonts. -->
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <!-- Per-page <title>, description, OpenGraph, Twitter and JSON-LD are
          injected by the <SEO /> component in src/components/SEO.jsx via

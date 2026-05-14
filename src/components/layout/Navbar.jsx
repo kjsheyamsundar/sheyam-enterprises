@@ -98,6 +98,10 @@ function Logo({ onClick }) {
       <img
         src="/logo.png"
         alt="Sheyam Enterprises"
+        width="171"
+        height="80"
+        fetchpriority="high"
+        decoding="async"
         className="h-20 w-auto"
       />
     </Link>

@@ -142,6 +142,10 @@ function AboutColumn() {
         <img
           src="/logo.png"
           alt="Sheyam Enterprises"
+          width="205"
+          height="96"
+          loading="lazy"
+          decoding="async"
           className="h-24 w-auto"
         />
       </Link>
